@@ -6,7 +6,7 @@ const BASE = process.env.NEXT_PUBLIC_API_BASE_URL!;
 type NodeRequestInit = RequestInit & { duplex?: 'half' };
 
 async function forward(req: Request, path: string) {
-  const access = readAccessToken();
+  const access = await readAccessToken();
   const url = `${BASE}/${path}`;
 
   const method = req.method.toUpperCase();
@@ -36,7 +36,12 @@ async function forward(req: Request, path: string) {
     }
   }
 
-  if (access) headers.set('authorization', `Bearer ${access}`);
+  if (access) {
+    console.log('Proxy attaching token:', access?.toString());
+    headers.set('authorization', `Bearer ${access}`);
+  } else {
+    console.log('Proxy: no access token found');
+  }
 
   const init: NodeRequestInit = {
     method,

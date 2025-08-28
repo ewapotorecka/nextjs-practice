@@ -5,7 +5,10 @@ export type Me = { id: string; email: string; roles?: string[] };
 export const meQuery = queryOptions({
   queryKey: ['me'],
   queryFn: async ({ signal }: QueryFunctionContext) => {
-    const r = await fetch('/api/be/auth/me', { signal, cache: 'no-store' });
+    const r = await fetch('/api/proxy/users/me', {
+      signal,
+      cache: 'no-store',
+    });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return r.json() as Promise<Me>;
   },

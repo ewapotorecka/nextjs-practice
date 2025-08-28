@@ -33,12 +33,14 @@ export async function POST(req: Request) {
     return new NextResponse('Invalid response from backend', { status: 500 });
   }
 
-  setAuthCookies(
+  await setAuthCookies(
     data.accessToken,
     data.accessExpiresIn ?? 15 * 60,
     data.refreshToken,
     data.refreshExpiresIn ?? 30 * 24 * 60 * 60
   );
+
+  console.log('Login: cookies set with access token', data.accessToken);
 
   return NextResponse.json({ ok: true });
 }
